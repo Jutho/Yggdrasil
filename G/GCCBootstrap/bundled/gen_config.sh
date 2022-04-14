@@ -67,22 +67,12 @@ esac
 # Handle libc stuff
 case "${bb_target}" in
     *gnu*)
-#        case "${bb_target}" in
-#            arm*|aarch64*)
-#                echo "CT_GLIBC_V_2_17=y"
-#                ;;
-#            x86_64*|i686*)
-#                echo "CT_OBSOLETE=y"
-#                echo "CT_GLIBC_V_2_12_1=y"
-#                echo "CT_GLIBC_VERSION=\"2.12.1\""
-#                ;;
-#            powerpc64le*)
         echo "CT_GLIBC_V_2_19=y"
-#                ;;
-#            *)
-#                echo "ERROR: Unhandled glibc arch '${bb_target}'" >&2
-#                exit 1
-#        esac
+        ;;
+    *musl*)
+        echo "CT_EXPERIMENTAL=y"
+        echo "CT_LIBC_MUSL=y"
+        echo "CT_MUSL_v_1_2_2=y"
         ;;
     *)
         echo "ERROR: Unhandled libc '${bb_target}'" >&2
