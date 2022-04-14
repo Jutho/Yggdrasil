@@ -12,7 +12,15 @@ CT_GCC_V_9=y
 # Disable progress bar, it fills up our logs:
 CT_LOG_PROGRESS_BAR=n
 
+# We use some experimental features, just enable them for all
+CT_EXPERIMENTAL=y
+
+# Explicitly claim the '--build' triplet, so there's no confusion
 CT_BUILD="${MACHTYPE}"
+
+# Tell ct-ng to not remove our prefix... this really confused me, as the
+# build would finish, but the resultant artifact was empty, because it
+# would have cleared out the symlink to the target-specific prefix. Orz.
 CT_PREFIX_DIR="${prefix}"
 CT_PREFIX_DIR_RO=n
 CT_RM_RF_PREFIX_DIR=n
@@ -39,6 +47,12 @@ CT_OMIT_TARGET_VENDOR=y
 CT_TARGET_VENDOR=
 EOF
         ;;
+    *mingw*)
+        cat <<-EOF
+CT_TARGET_VENDOR="w64"
+CT_KERNEL_WINDOWS=y
+EOF
+        ;;
     *)
         echo "Unhandled OS '${target}'" >&2
         exit 1
@@ -49,6 +63,7 @@ esac
 case "${target}" in
     arm*)
         echo "CT_ARCH_ARM=y"
+        echo "CT_ARCH_FLOAT_HW=y"
         ;;
     aarch64*)
         echo "CT_ARCH_ARM=y"
@@ -78,9 +93,13 @@ case "${target}" in
         echo "CT_GLIBC_V_2_19=y"
         ;;
     *musl*)
-        echo "CT_EXPERIMENTAL=y"
         echo "CT_LIBC_MUSL=y"
         echo "CT_MUSL_v_1_2_2=y"
+        ;;
+    *mingw*)
+        echo "CT_LIBC_MINGW_W64=y"
+        echo "CT_THREADS_POSIX=y"
+        echo "CT_MINGW_W64_V_V9_0=y"
         ;;
     *)
         echo "ERROR: Unhandled libc '${target}'" >&2

@@ -31,6 +31,8 @@ sources = [
                "2d3997f588401ea095a0b27227b1d50cdfdd416236f6567b564549d3b46ea2a2"),
     FileSource("https://musl.libc.org/releases/musl-1.2.2.tar.gz",
                "9b969322012d796dc23dda27a35866034fa67d8fb67e0e2c45c913c3d43219dd"),
+    FileSource("https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/mingw-w64-v9.0.0.tar.bz2",
+               "1929b94b402f5ff4d7d37a9fe88daa9cc55515a6134805c104d1794ae22a4181"),
     FileSource("https://github.com/madler/zlib/archive/refs/tags/v1.2.11.tar.gz",
                "629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff",
                filename="zlib-1.2.11.tar.gz"),
@@ -86,17 +88,17 @@ ${WORKSPACE}/srcdir/gen_config.sh > .config
 ./ct-ng upgradeconfig
 ./ct-ng build
 
-# GCC doesn't use `armv6` or `armv7l`, it just calls them `arm`:
-GCC_TRIPLET="${target}"
-if [[ "${target}" == arm* ]]; then
-    GCC_TRIPLET="arm-$(cut -d- -f2- <<<"${target}")"
-fi
-[[ -f "${bindir}/${GCC_TRIPLET}-gcc" ]]
+# Move licenses to the right spot
+mkdir -p /tmp/GCCBootstrap
+mv ${prefix}/share/licenses/* /tmp/GCCBootstrap
+mv /tmp/GCCBootstrap ${prefix}/share/licenses/
+
+[[ -f "${bindir}/${target}-gcc" ]]
 """
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
-platforms = filter(p -> Sys.islinux(p), supported_platforms())
+platforms = filter(p -> Sys.islinux(p) || Sys.iswindows(p), supported_platforms())
 
 # The products that we will ensure are always built
 products = Product[
