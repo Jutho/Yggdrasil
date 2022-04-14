@@ -9,6 +9,9 @@ CT_CONFIG_VERSION=4
 # Always build GCC v9.X
 CT_GCC_V_9=y
 
+# Disable progress bar, it fills up our logs:
+CT_LOG_PROGRESS_BAR=n
+
 CT_BUILD="${MACHTYPE}"
 CT_PREFIX_DIR="${prefix}"
 CT_PREFIX_DIR_RO=n

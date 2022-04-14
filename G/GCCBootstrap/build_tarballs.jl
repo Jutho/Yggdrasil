@@ -85,7 +85,13 @@ make -j${nproc}
 ${WORKSPACE}/srcdir/gen_config.sh > .config
 ./ct-ng upgradeconfig
 ./ct-ng build
-[[ -f "${bindir}/${bb_target}-gcc" ]]
+
+# GCC doesn't use `armv6` or `armv7l`, it just calls them `arm`:
+GCC_TRIPLET="${target}"
+if [[ "${target}" == arm* ]]; then
+    GCC_TRIPLET="arm-$(cut -d- -f2- <<<"${target}")"
+fi
+[[ -f "${bindir}/${GCC_TRIPLET}-gcc" ]]
 """
 
 # These are the platforms we will build for by default, unless further
