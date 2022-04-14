@@ -26,7 +26,7 @@ CT_CC_LANG_CXX=y
 EOF
 
 # Handle OS stuff
-case "${bb_target}" in
+case "${target}" in
     *linux*)
         cat <<-EOF
 # We're building against linux, and always use an older kernel
@@ -40,13 +40,13 @@ CT_TARGET_VENDOR=
 EOF
         ;;
     *)
-        echo "Unhandled OS '${bb_target}'" >&2
+        echo "Unhandled OS '${target}'" >&2
         exit 1
         ;;
 esac
 
 # Handle arch stuff
-case "${bb_target}" in
+case "${target}" in
     arm*)
         echo "CT_ARCH_ARM=y"
         ;;
@@ -68,12 +68,12 @@ case "${bb_target}" in
         echo "CT_ARCH_64=y"
         ;;
     *)
-        echo "ERROR: Unhandled arch '${bb_target}'" >&2
+        echo "ERROR: Unhandled arch '${target}'" >&2
         exit 1
 esac
 
 # Handle libc stuff
-case "${bb_target}" in
+case "${target}" in
     *gnu*)
         echo "CT_GLIBC_V_2_19=y"
         ;;
@@ -83,7 +83,7 @@ case "${bb_target}" in
         echo "CT_MUSL_v_1_2_2=y"
         ;;
     *)
-        echo "ERROR: Unhandled libc '${bb_target}'" >&2
+        echo "ERROR: Unhandled libc '${target}'" >&2
         exit 1
         ;;
 esac
