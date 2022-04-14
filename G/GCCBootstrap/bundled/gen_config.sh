@@ -64,6 +64,14 @@ case "${target}" in
     arm*)
         echo "CT_ARCH_ARM=y"
         echo "CT_ARCH_FLOAT_HW=y"
+        if [[ "${bb_full_target}" == armv6l* ]]; then
+            echo "CT_ARCH_ARCH=\"armv6+fp\""
+        elif [[ "${bb_full_target}" == armv7l* ]]; then
+            echo "CT_ARCH_ARCH=\"armv7+fp\""
+        else
+            echo "ERROR: Unknown arm microarchitecture in ${bb_full_target}!" >&2
+            exit 1
+        fi
         ;;
     aarch64*)
         echo "CT_ARCH_ARM=y"
@@ -76,6 +84,7 @@ case "${target}" in
     x86_64*)
         echo "CT_ARCH_X86=y"
         echo "CT_ARCH_64=y"
+        echo "CT_ARCH_ARCH=\"x86-64\""
         ;;
     powerpc64le*)
         echo "CT_ARCH_POWERPC=y"
