@@ -78,7 +78,7 @@ case "${target}" in
         echo "CT_ARCH_64=y"
         ;;
     powerpc64le*)
-        echo "CT_ARCH_POWER=y"
+        echo "CT_ARCH_POWERPC=y"
         echo "CT_ARCH_LE=y"
         echo "CT_ARCH_64=y"
         ;;
