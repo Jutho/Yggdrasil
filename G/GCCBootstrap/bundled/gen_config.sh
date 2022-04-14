@@ -62,6 +62,11 @@ case "${bb_target}" in
         echo "CT_ARCH_X86=y"
         echo "CT_ARCH_64=y"
         ;;
+    powerpc64le*)
+        echo "CT_ARCH_POWER=y"
+        echo "CT_ARCH_LE=y"
+        echo "CT_ARCH_64=y"
+        ;;
     *)
         echo "ERROR: Unhandled arch '${bb_target}'" >&2
         exit 1
