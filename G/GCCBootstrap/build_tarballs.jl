@@ -88,6 +88,18 @@ ${WORKSPACE}/srcdir/gen_config.sh > .config
 ./ct-ng upgradeconfig
 ./ct-ng build
 
+# Fix case-insensitivity problems in netfilter headers
+if [[ "${target}" == *linux* ]]; then
+    NF="${prefix}/${target}/sysroot/usr/include/linux/netfilter"
+    for NAME in CONNMARK DSCP MARK RATEEST TCPMSS; do
+        mv "${NF}/xt_${NAME}.h" "${NF}/xt_${NAME}_.h"
+    done
+    for NAME in ECN TTL; do
+        mv "${NF}_ipv4/ipt_${NAME}.h" "${NF}_ipv4/ipt_${NAME}_.h"
+    done
+    mv "${NF}_ipv6/ip6t_HL.h" "${NF}_ipv6/ip6t_HL_.h"
+fi
+
 # Move licenses to the right spot
 mkdir -p /tmp/GCCBootstrap
 mv ${prefix}/share/licenses/* /tmp/GCCBootstrap
